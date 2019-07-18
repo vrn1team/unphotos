@@ -6,13 +6,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.beloushkin.unphotos.model.Photo
 import com.beloushkin.unphotos.model.UnsplashApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
+import ru.gildor.coroutines.retrofit.*
 
 class UnsplashViewModel(application: Application):AndroidViewModel(application)
-    ,Callback<List<Photo>>
 {
 
     val photos by lazy { MutableLiveData<List<Photo>>() }
@@ -26,28 +27,39 @@ class UnsplashViewModel(application: Application):AndroidViewModel(application)
         getPhotos()
     }
 
-    fun getPhotos() {
-        val call:Call<List<Photo>> = apiService.getPhotos()
-        call.enqueue(this)
+    private fun getPhotos() {
+        GlobalScope.launch(Dispatchers.Main) {
+            getPhotosAsync()
+        }
     }
 
-    override fun onFailure(call: Call<List<Photo>>, t: Throwable) {
-        t.printStackTrace()
-        isLoading.value = false
-        loadError.value = true
-    }
+    private suspend fun getPhotosAsync() {
+        val result: Result<List<Photo>> = apiService.getPhotos().awaitResult()
 
-    override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
-        if (response.isSuccessful) {
-            photos.value = response.body()
-            isLoading.value = false
-            loadError.value = false
-        } else {
-            Log.d("M_UnsplashViewModel", response.errorBody().toString())
+        //Result.Ok and Result.Error both implement ResponseResult
+        if (result is ResponseResult) {
+            if (result.response.isSuccessful){
+                val loadedPhotos = result.getOrNull()
+                if (loadedPhotos.isNullOrEmpty()) {
+                    isLoading.value = false
+                    loadError.value = true
+                } else {
+                    photos.value = loadedPhotos
+                    isLoading.value = false
+                    loadError.value = false
+                }
+            }
+        }
+
+        //Result.Error and Result.Exception implement ErrorResult
+        if (result is ErrorResult) {
+            // Here we have  access to `exception` property of result
+            Log.d("M_UnsplashViewModel", result.exception.localizedMessage)
             isLoading.value = false
             loadError.value = true
         }
     }
+
 
     override fun onCleared() {
         super.onCleared()

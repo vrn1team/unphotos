@@ -59,6 +59,11 @@ dependencies {
 
     implementation "com.github.bumptech.glide:glide:$glideVersion"
 
+    implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:1.1.0'
+
+    implementation 'com.github.hotchemi:permissionsdispatcher:4.1.0'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:4.1.0'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

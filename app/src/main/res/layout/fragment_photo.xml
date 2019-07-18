@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-        android:id="@id/photoLayout"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@id/photoLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -57,7 +57,16 @@
             />
         </LinearLayout>
     </LinearLayout>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:src="@android:drawable/ic_menu_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_fab_bottom_96"
+            android:layout_gravity="bottom|center_horizontal"
+            android:id="@+id/fabShare"
+            android:clickable="true"
+            android:focusable="true"
+            app:backgroundTint="@color/colorPrimaryLight"/>
 
 
 </FrameLayout>

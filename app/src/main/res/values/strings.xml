@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Unsplash Photos</string>
+    <string name="send_to">Send image to</string>
 </resources>
