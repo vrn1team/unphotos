@@ -24,15 +24,15 @@ class ListFragment : Fragment() {
 
     private lateinit var viewModel: UnsplashViewModel
     private val listAdapter = PhotoListAdapter(arrayListOf())
-    private val listDataObserver = Observer<List<Photo>> {list ->
+    private val listDataObserver = Observer<List<Photo>> { list ->
         list?.let {
             photosList.visibility = View.VISIBLE
             listAdapter.updatePhotosList(it)
         }
     }
 
-    private val loadingDataObserver = Observer<Boolean> {isLoading ->
-        loadingView.visibility = if(isLoading) View.VISIBLE else View.GONE
+    private val loadingDataObserver = Observer<Boolean> { isLoading ->
+        loadingView.visibility = if (isLoading) View.VISIBLE else View.GONE
         if (isLoading) {
             listError.visibility = View.GONE
             photosList.visibility = View.GONE
@@ -40,7 +40,7 @@ class ListFragment : Fragment() {
     }
 
     private val errorObserver = Observer<Boolean> { isError ->
-        listError.visibility = if(isError) View.VISIBLE else View.GONE
+        listError.visibility = if (isError) View.VISIBLE else View.GONE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
