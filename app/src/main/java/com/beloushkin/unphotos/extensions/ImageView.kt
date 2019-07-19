@@ -23,7 +23,7 @@ fun ImageView.loadNetworkImage(uri: String?, progressDrawable: CircularProgressD
         .into(this)
 }
 
-fun ImageView.saveNetworkImageToFileAsync(uri: String?, file: File):Deferred<String?> {
+fun ImageView.saveNetworkImageToFileAsync(uri: String?, file: File):Deferred<File?> {
     val requestOptions = RequestOptions()
         .downsample(DownsampleStrategy.CENTER_INSIDE)
         .skipMemoryCache(true)
@@ -43,7 +43,7 @@ fun ImageView.saveNetworkImageToFileAsync(uri: String?, file: File):Deferred<Str
             out.flush()
             out.close()
             Log.i("ImageView", "Image saved.")
-            file.name
+            file
         } catch (e: Exception) {
             Log.i("ImageView", "Failed to save image.")
             null

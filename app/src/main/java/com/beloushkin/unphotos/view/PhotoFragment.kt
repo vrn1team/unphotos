@@ -19,6 +19,8 @@ import com.beloushkin.unphotos.model.Photo
 import com.beloushkin.unphotos.model.User
 import com.beloushkin.unphotos.util.getProgressDrawable
 import kotlinx.android.synthetic.main.fragment_photo.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import java.io.File
@@ -72,23 +74,39 @@ class PhotoFragment : Fragment(),View.OnClickListener {
     override fun onClick(v: View?) {
         if (v?.id == fabShare.id) {
 
-            context?.let {
-                // getExternalFilesDir() + "/Pictures" should match the declaration in fileprovider.xml paths
-                val file = File(it.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                    "share_image_" + System.currentTimeMillis() + ".png")
-
-                fullImage.saveNetworkImageToFileAsync(photo?.url?.regular,file)
-
-                // wrap File object into a content provider. NOTE: authority here should match authority in manifest declaration
-                val bmpUri = FileProvider.getUriForFile(it,
-                    "com.beloushkin.unphotos.fileprovider", file)
-                val intent = Intent().apply {
-                    this.action = Intent.ACTION_SEND
-                    this.putExtra(Intent.EXTRA_STREAM, bmpUri)
-                    this.type = "image/jpeg"
+            context?.let {currContext ->
+                GlobalScope.launch {
+                   shareCurrentImage(currContext)
                 }
-                startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
             }
+        }
+    }
+
+    private suspend fun saveCurrentImageToTmpFileAsync(context: Context, url:String):File? {
+
+        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "share_image_" + System.currentTimeMillis() + ".png")
+        return fullImage.saveNetworkImageToFileAsync(url,file).await()
+
+    }
+
+    private suspend fun shareCurrentImage(context: Context) {
+        // getExternalFilesDir() + "/Pictures" should match the declaration in fileprovider.xml paths
+        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "share_image_" + System.currentTimeMillis() + ".png")
+
+        fullImage.saveNetworkImageToFileAsync(photo?.url?.regular,file).await()
+        val tmpFile = saveCurrentImageToTmpFileAsync(context, photo!!.url!!.regular!!)
+
+        tmpFile?.let {
+            val bmpUri = FileProvider.getUriForFile(context,
+                "com.beloushkin.unphotos.fileprovider", tmpFile)
+            val intent = Intent().apply {
+                this.action = Intent.ACTION_SEND
+                this.putExtra(Intent.EXTRA_STREAM, bmpUri)
+                this.type = "image/jpeg"
+            }
+            startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
         }
     }
 }
