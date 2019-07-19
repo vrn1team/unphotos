@@ -5,11 +5,11 @@
             app:startDestination="@id/listFragment">
 
     <fragment android:id="@+id/listFragment" android:name="com.beloushkin.unphotos.view.ListFragment"
-              android:label="fragment_list" tools:layout="@layout/fragment_list">
+              android:label="@string/list_fragment_label" tools:layout="@layout/fragment_list">
         <action android:id="@+id/action_detail" app:destination="@id/photoFragment"/>
     </fragment>
     <fragment android:id="@+id/photoFragment" android:name="com.beloushkin.unphotos.view.PhotoFragment"
-              android:label="fragment_photo" tools:layout="@layout/fragment_photo">
+              android:label="@string/detail_fragment_label" tools:layout="@layout/fragment_photo">
         <action android:id="@+id/action_list" app:destination="@id/listFragment"/>
         <argument android:name="photo" app:argType="com.beloushkin.unphotos.model.Photo" app:nullable="true"/>
     </fragment>

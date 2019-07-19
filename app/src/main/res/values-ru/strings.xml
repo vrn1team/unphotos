@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Unsplash Photos</string>
     <string name="send_to">Отправить изображение</string>
+    <string name="list_fragment_label">Uhsplash Photos</string>
+    <string name="detail_fragment_label">Full Photo</string>
+    <string name="avatar">avatar</string>
+    <string name="full_photo">Full Image</string>
 </resources>

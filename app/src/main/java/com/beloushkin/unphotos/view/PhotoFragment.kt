@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
-
 import com.beloushkin.unphotos.R
 import com.beloushkin.unphotos.extensions.loadNetworkImage
 import com.beloushkin.unphotos.extensions.saveNetworkImageToFileAsync
