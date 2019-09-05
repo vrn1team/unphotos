@@ -39,7 +39,7 @@ fun ImageView.saveNetworkImageToFileAsync(uri: String?, file: File):Deferred<Fil
             .get()
         try {
             val out = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out!!)
             out.flush()
             out.close()
             Log.i("ImageView", "Image saved.")

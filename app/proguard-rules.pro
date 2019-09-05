@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#OkHttp
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonNullByDefault
+
+#Retrofit
+-dontwarn retrofit2.KotlinExtensions
+-dontwarn retrofit2.kotlinExtensions$*
+-dontwarn sun.misc.*
+
+#Kotlin
+-dontwarn kotlinx.atomicfu.*
+
+#Models
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
